@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.w3c.dom.Text;
@@ -55,11 +56,12 @@ public class Fragment2 extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<String> dateArray;
     private ArrayList<Integer> dateSumSteps;
-    private ArrayList<Boolean> dateTotalShown;
+    //private ArrayList<Boolean> dateTotalShown;
 //    HashMap<String, ArrayList<String>> map;
     ArrayList<String>str;
     ArrayList<String> tempData;
     private Double overallDailyAverageSteps;
+    private MaterialCardView materialcCard;
 
     public Fragment2() {
         // Required empty public constructor
@@ -101,13 +103,14 @@ public class Fragment2 extends Fragment {
 //        map = new HashMap<String, ArrayList<String>>();
         dateArray = new ArrayList<>();
         dateSumSteps = new ArrayList<>();
-        dateTotalShown = new ArrayList<>();
+        //dateTotalShown = new ArrayList<>();
         tempData = new ArrayList<>();
         overallDailyAverageSteps = 0.0;
 
 
         tv3 = view.findViewById(R.id.tv3_frag);
         tv4 = view.findViewById(R.id.tv4);
+        materialcCard = view.findViewById(R.id.materialCard);
         tv3.setText("");
         tv3.setText(readFromFile());
 
@@ -124,9 +127,13 @@ public class Fragment2 extends Fragment {
 //        }
         if(readFromFile().equals("")){
             tv3.setText("No data found. Pull down to refresh data.");
+            tv4.setVisibility(View.GONE);
+            materialcCard.setVisibility(View.GONE);
         }
-
-
+        else {
+            tv4.setVisibility(View.VISIBLE);
+            materialcCard.setVisibility(View.VISIBLE);
+        }
 
 
         clearButton = view.findViewById(R.id.clearButton);
@@ -145,6 +152,12 @@ public class Fragment2 extends Fragment {
                 showData();
                 if(readFromFile().equals("")){
                     tv3.setText("No data found. Pull down to refresh data.");
+                    tv4.setVisibility(View.GONE);
+                    materialcCard.setVisibility(View.GONE);
+                }
+                else {
+                    tv4.setVisibility(View.VISIBLE);
+                    materialcCard.setVisibility(View.VISIBLE);
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -152,11 +165,9 @@ public class Fragment2 extends Fragment {
 
 
 
-        clearButton.setOnClickListener(new View.OnClickListener() {
+        clearButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-
-
+            public boolean onLongClick(View v) {
                 MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(getActivity()).setTitle("Set Goal")
                         .setTitle("Confirm")
                         .setMessage("Are you sure you want to clear all data?")
@@ -170,6 +181,8 @@ public class Fragment2 extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 tv3.setText("No data found. Pull down to refresh data.");
+                                tv4.setVisibility(View.GONE);
+                                materialcCard.setVisibility(View.GONE);
                                 clearTextData();
                                 onResume();
 
@@ -177,9 +190,10 @@ public class Fragment2 extends Fragment {
                         });
 
                 materialAlertDialogBuilder.show();
-
+                return false;
             }
         });
+
         return view;
     }
 
@@ -253,8 +267,7 @@ public class Fragment2 extends Fragment {
 
                 dateArray = new ArrayList<>();
                 dateSumSteps = new ArrayList<>();
-                dateTotalShown = new ArrayList<>();
-
+                //dateTotalShown = new ArrayList<>();
                 tempData = new ArrayList<>();
 
                 while ((receiveString = bufferedReader.readLine()) != null) {
