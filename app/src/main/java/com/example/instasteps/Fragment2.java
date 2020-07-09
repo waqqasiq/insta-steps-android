@@ -1,5 +1,7 @@
 package com.example.instasteps;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -195,6 +198,17 @@ public class Fragment2 extends Fragment {
                 return false;
             }
         });
+        tv3.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("myclipboard", tv3.getText());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getActivity(), "Data copied to clipboard", Toast.LENGTH_SHORT).show();
+
+                return false;
+            }
+        });
 
         return view;
     }
@@ -371,5 +385,7 @@ public class Fragment2 extends Fragment {
         Date date = new Date();
         return dateFormat.format(date);
     }
+
+
 
 }
