@@ -92,6 +92,7 @@ public class Fragment2 extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Log.d("~waqqas", "onCreate: fragment2");
     }
 
     @Override
@@ -101,6 +102,7 @@ public class Fragment2 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_2, container, false);
 
 //        map = new HashMap<String, ArrayList<String>>();
+        Log.d("~waqqas", "onCreateView: fragment2");
         dateArray = new ArrayList<>();
         dateSumSteps = new ArrayList<>();
         //dateTotalShown = new ArrayList<>();
@@ -369,4 +371,5 @@ public class Fragment2 extends Fragment {
         Date date = new Date();
         return dateFormat.format(date);
     }
+
 }

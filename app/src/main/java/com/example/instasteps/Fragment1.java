@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,6 +68,7 @@ public class Fragment1 extends Fragment implements SensorEventListener {
     private MediaPlayer mp;
     SharedPreferences preferences;
     private final String FILE_NAME ="mysteps.txt";
+    private float prevEventValue;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -100,7 +102,7 @@ public class Fragment1 extends Fragment implements SensorEventListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        Log.d("~waqqas", "onCreate: fragment1");
 
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 
@@ -109,12 +111,22 @@ public class Fragment1 extends Fragment implements SensorEventListener {
 
     }
 
+    private void loadData() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("myprefs", Context.MODE_PRIVATE);
+        Log.d("~waqqas", "loadData: "+sharedPreferences.getFloat("mysteps", 0f));
+        totalsteps = sharedPreferences.getFloat("mysteps", 0f);
+        float tempMax = sharedPreferences.getFloat("maxprogress", 1000f);
+        tv2.setText("/"+(int)tempMax);
+        circularProgressBar.setProgressMax(sharedPreferences.getFloat("maxprogress", 1000f));
+        checked = (int) sharedPreferences.getFloat("checked", 0f);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         Log.d("~waqqas", "onSensorChanged: onResume");
         running = true;
-        previousTotalSteps = totalsteps;
+        //previousTotalSteps = totalsteps;
 
         Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
@@ -127,20 +139,36 @@ public class Fragment1 extends Fragment implements SensorEventListener {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("~waqqas", "onPause: ");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("myprefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putFloat("mysteps", totalsteps);
+        editor.putFloat("checked", checked);
+        editor.putFloat("maxprogress", circularProgressBar.getProgressMax());
+        editor.apply();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE); // added later
+
         View view = inflater.inflate(R.layout.fragment_1, container, false);
         tv1 = view.findViewById(R.id.tv1);
         tv2 = view.findViewById(R.id.tv2);
         circularProgressBar = view.findViewById(R.id.circularProgressBar);
         resetButton = view.findViewById(R.id.resetButton);
+        loadData();
+
 //        stepGoals.add("1000 steps");
         goalFloat = new float[]{1000f, 2500f, 5000f, 10000f};
         stepGoals = new String[]{"1000 steps", "2500 steps", "5000 steps", "10000 steps"};
         mp = MediaPlayer.create(getActivity(), R.raw.tapsound);
+        Log.d("~waqqas", "onCreateView: fragment1");
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +195,7 @@ public class Fragment1 extends Fragment implements SensorEventListener {
                                 completed = false;
                             }
                         })
-                        .setSingleChoiceItems(stepGoals, 0, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(stepGoals, checked, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -190,23 +218,30 @@ public class Fragment1 extends Fragment implements SensorEventListener {
         Log.d("~waqqas", "onSensorChanged: "+totalsteps);
         if(running) {
 
-
                 //totalsteps = event.values[0];
                 Log.d("~waqqas", "onSensorChanged: "+event.values[0]);
                 if (event.values[0] > 0) {
                     if(firstTime){
                         firstTime = false;
+                        prevEventValue = event.values[0];
+                        Log.d("~waqqas", "onSensorChanged: prevEventValue "+prevEventValue);
                     }else{
-                        totalsteps += 1.0;
+                        totalsteps += 1;
+                        prevEventValue = event.values[0];
                         previousEventValue = event.values[0];
+                        Log.d("~waqqas", "onSensorChanged: totalsteps "+totalsteps);
+                        Log.d("~waqqas", "onSensorChanged: prevEventValue "+prevEventValue);
+
                     }
                 }
                 //circularProgressBar.setProgressMax(20f); //for debugging purpose
                 if((int)circularProgressBar.getProgressMax()>=(int)totalsteps){
-                    int currentSteps = (int)totalsteps - (int)previousTotalSteps;
+                    int currentSteps = (int)totalsteps; //- (int)previousTotalSteps;
                     tv1.setText(""+currentSteps);
                     //tv1.setText(currentSteps);
                     Log.d("~waqqas", "onSensorChanged: currentsteps"+currentSteps);
+
+
 
                     circularProgressBar.setProgressWithAnimation((float)currentSteps);
                 }
@@ -277,9 +312,10 @@ public class Fragment1 extends Fragment implements SensorEventListener {
         }
     }
     private String getDateTime() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", new Locale("en", "BD"));
         Date date = new Date();
         return dateFormat.format(date);
     }
+
 
 }
