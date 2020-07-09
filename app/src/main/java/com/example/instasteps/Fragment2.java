@@ -25,10 +25,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.PatternSyntaxException;
 
 /**
@@ -107,6 +111,12 @@ public class Fragment2 extends Fragment {
         tv3.setText("");
         tv3.setText(readFromFile());
 
+        try {
+            dateArray = sortDates(dateArray);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Collections.sort(dateArray, Collections.reverseOrder());
         showData();
 
 //        for (int i = 0; i < dateArray.size(); i++) {
@@ -126,6 +136,12 @@ public class Fragment2 extends Fragment {
             public void onRefresh() {
                 tv3.setText("");
                 tv3.setText(readFromFile());
+                try {
+                    dateArray = sortDates(dateArray); //sorts date in ascending orde: oldest first
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Collections.sort(dateArray, Collections.reverseOrder()); // latest date first
                 showData();
                 if(readFromFile().equals("")){
                     tv3.setText("No data found. Pull down to refresh data.");
@@ -167,6 +183,16 @@ public class Fragment2 extends Fragment {
         return view;
     }
 
+
+        private ArrayList<String> sortDates(ArrayList<String> dates) throws ParseException {
+            SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd");
+            Map<Date, String> dateFormatMap = new TreeMap<>();
+            for (String date: dates)
+                dateFormatMap.put(f.parse(date), date);
+            return new ArrayList<>(dateFormatMap.values());
+        }
+
+
     private void showData() {
         String overallstring = "";
         int todaysTotal = 0;
@@ -174,11 +200,9 @@ public class Fragment2 extends Fragment {
 
         for (int i = 0; i < dateArray.size(); i++) {
             String tempString = "";
-            if(todayDate.equals(dateArray.get(i))){
-                todaysTotal = dateSumSteps.get(i);
-            }
+
             //tempString += dateArray.get(i) +"\n";
-            //int temptotal = 0;
+            int temptotal = 0;
             for (int j = 0; j < tempData.size(); j++) {
 
                 String[] splitArray = new String[]{};
@@ -191,11 +215,14 @@ public class Fragment2 extends Fragment {
                 if(splitArray[0].equals(dateArray.get(i))){
                     Log.d("~waqqas", "onCreateView: tempdata" +tempData.get(j));
                     tempString += tempData.get(j)+"\n";
-                    //temptotal += Integer.parseInt(splitArray[2]);
+                    temptotal += Integer.parseInt(splitArray[2]);
 
                 }
             }
-            tempString += dateArray.get(i) +": Total Steps -> "+ dateSumSteps.get(i)+"\n";
+            if(todayDate.equals(dateArray.get(i))){
+                todaysTotal = temptotal;
+            }
+            tempString += dateArray.get(i) +": Total Steps -> "+ temptotal+"\n";
             overallstring +=tempString+"\n";
         }
 
