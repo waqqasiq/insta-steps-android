@@ -14,12 +14,15 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="#2E3B55"
             app:titleTextColor="#fff"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:tabTextColor="#2E3B55"
+            app:tabIndicatorColor="#2E3B55">
 
         </com.google.android.material.tabs.TabLayout>
 

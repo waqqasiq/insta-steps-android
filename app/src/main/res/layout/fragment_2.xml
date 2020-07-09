@@ -14,11 +14,12 @@
 
         <Button
             android:id="@+id/clearButton"
-            style="@style/Widget.MaterialComponents.Button.Icon"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:text="Clear Data"
+            android:backgroundTint="#2E3B55"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -42,7 +43,10 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/materialCard"
                     android:layout_height="90dp"
-                    android:layout_width="match_parent" >
+                    android:layout_width="match_parent"
+                    android:checkable="true"
+                    android:clickable="true"
+                    android:focusable="true">
                     <TextView
                         android:id="@+id/tv4"
                         android:layout_width="match_parent"

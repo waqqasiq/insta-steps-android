@@ -25,14 +25,16 @@
             android:id="@+id/circularProgressBar"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            app:cpb_background_progressbar_color="#b6bbd8"
+            app:cpb_background_progressbar_color="#ADBAD4"
             app:cpb_background_progressbar_width="20dp"
             android:layout_centerInParent="true"
             app:cpb_progress_direction="to_right"
-            app:cpb_progressbar_color="#3f51b5"
+            app:cpb_progressbar_color="#616E88"
             app:cpb_progress_max="1000"
             app:cpb_progressbar_width="15dp"
             app:cpb_round_border="true" />
+<!--        app:cpb_progressbar_color="#3f51b5"-->
+<!--        app:cpb_background_progressbar_color="#b6bbd8"-->
 
         <TextView
             android:id="@+id/tv1"
@@ -58,6 +60,7 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:padding="40dp"
+            android:textColor="#2E3B55"
             android:text="RESET"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             />
