@@ -26,7 +26,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,9 +46,16 @@ public class Fragment2 extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView tv3;
+    private TextView tv3, tv4;
     private Button clearButton;
     SwipeRefreshLayout swipeRefreshLayout;
+    private ArrayList<String> dateArray;
+    private ArrayList<Integer> dateSumSteps;
+    private ArrayList<Boolean> dateTotalShown;
+//    HashMap<String, ArrayList<String>> map;
+    ArrayList<String>str;
+    ArrayList<String> tempData;
+    private Double overallDailyAverageSteps;
 
     public Fragment2() {
         // Required empty public constructor
@@ -83,12 +93,31 @@ public class Fragment2 extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_2, container, false);
+
+//        map = new HashMap<String, ArrayList<String>>();
+        dateArray = new ArrayList<>();
+        dateSumSteps = new ArrayList<>();
+        dateTotalShown = new ArrayList<>();
+        tempData = new ArrayList<>();
+        overallDailyAverageSteps = 0.0;
+
+
         tv3 = view.findViewById(R.id.tv3_frag);
+        tv4 = view.findViewById(R.id.tv4);
         tv3.setText("");
         tv3.setText(readFromFile());
+
+        showData();
+
+//        for (int i = 0; i < dateArray.size(); i++) {
+//            tv4.setText(dateArray.get(i) + ": "+dateSumSteps.get(i));
+//        }
         if(readFromFile().equals("")){
             tv3.setText("No data found. Pull down to refresh data.");
         }
+
+
+
 
         clearButton = view.findViewById(R.id.clearButton);
         swipeRefreshLayout = view.findViewById(R.id.pullToRefresh);
@@ -97,12 +126,15 @@ public class Fragment2 extends Fragment {
             public void onRefresh() {
                 tv3.setText("");
                 tv3.setText(readFromFile());
+                showData();
                 if(readFromFile().equals("")){
                     tv3.setText("No data found. Pull down to refresh data.");
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+
 
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +167,49 @@ public class Fragment2 extends Fragment {
         return view;
     }
 
+    private void showData() {
+        String overallstring = "";
+        int todaysTotal = 0;
+        String todayDate = getDate();
+
+        for (int i = 0; i < dateArray.size(); i++) {
+            String tempString = "";
+            if(todayDate.equals(dateArray.get(i))){
+                todaysTotal = dateSumSteps.get(i);
+            }
+            //tempString += dateArray.get(i) +"\n";
+            //int temptotal = 0;
+            for (int j = 0; j < tempData.size(); j++) {
+
+                String[] splitArray = new String[]{};
+                try {
+                    splitArray = tempData.get(j).split("\\s+");
+                } catch (PatternSyntaxException ex) {
+                    ex.printStackTrace();
+                }
+
+                if(splitArray[0].equals(dateArray.get(i))){
+                    Log.d("~waqqas", "onCreateView: tempdata" +tempData.get(j));
+                    tempString += tempData.get(j)+"\n";
+                    //temptotal += Integer.parseInt(splitArray[2]);
+
+                }
+            }
+            tempString += dateArray.get(i) +": Total Steps -> "+ dateSumSteps.get(i)+"\n";
+            overallstring +=tempString+"\n";
+        }
+
+        int overalltotal = 0;
+        for (int i = 0; i < dateSumSteps.size(); i++) {
+            overalltotal += dateSumSteps.get(i);
+        }
+        overallDailyAverageSteps = overalltotal*1.0/dateSumSteps.size();
+
+        tv3.setText(overallstring);
+        tv4.setText("Todays total steps: "+todaysTotal+"\nAverage daily steps: "+ String.format("%.2f", overallDailyAverageSteps));
+
+    }
+
 
     private String readFromFile() {
 
@@ -149,13 +224,63 @@ public class Fragment2 extends Fragment {
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
 
+                dateArray = new ArrayList<>();
+                dateSumSteps = new ArrayList<>();
+                dateTotalShown = new ArrayList<>();
+
+                tempData = new ArrayList<>();
+
                 while ((receiveString = bufferedReader.readLine()) != null) {
+                        Log.d("~waqqas", "readFromFile: "+receiveString);
                         stringBuilder.append(receiveString);
+
+                        tempData.add(receiveString);
+
+                        if(receiveString.length()>0) {
+                            String[] splitArray = new String[]{};
+                            try {
+                                splitArray = receiveString.split("\\s+");
+                            } catch (PatternSyntaxException ex) {
+                                ex.printStackTrace();
+                            }
+                            String date = splitArray[0];
+                            Log.d("~waqqas", "readFromFile: date"+date);
+                            int total = 0;
+                            int currentStringTotal;
+                            if(dateArray.contains(date)){
+                                int ind = dateArray.indexOf(date);
+                                Log.d("~waqqas", "readFromFile: index "+ind);
+                                currentStringTotal = Integer.parseInt(splitArray[2]);
+                                Log.d("~waqqas", "readFromFile: currentStringTotal " +currentStringTotal);
+                                int newtotal = dateSumSteps.get(ind) + currentStringTotal;
+                                dateSumSteps.set(ind, newtotal);
+                                Log.d("~waqqas", "readFromFile: datesumsteps " + newtotal);
+                                total = dateSumSteps.get(ind);
+                            }
+                            else {
+                                dateArray.add(date);
+                                dateSumSteps.add(Integer.parseInt(splitArray[2]));
+                                total = Integer.parseInt(splitArray[2]);
+
+                            }
+                            //dateArray.add();
+                            Log.d("~waqqas", "readFromFile: total "+total);
+                            stringBuilder.append(System.getProperty("line.separator"));
+                            stringBuilder.append("total for "+ date + ": "+total);
+                        }
+
                         stringBuilder.append(System.getProperty("line.separator"));
                 }
 
+//                str = new ArrayList<>();
+//                str = map.get("2020/07/09");
+//                for (int i = 0; i < str.size(); i++) {
+//                    tv4.setText(str.get(i));
+//                }
+
                 inputStream.close();
                 ret = stringBuilder.toString();
+
             }
         } catch (FileNotFoundException e) {
             Log.e("fragment 2", "File not found: " + e.toString());
@@ -198,5 +323,10 @@ public class Fragment2 extends Fragment {
         }
 
 
+    }
+    private String getDate() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

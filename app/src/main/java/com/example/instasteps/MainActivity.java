@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
         viewPagerAdapter.addFragment(fragment1, "Home");
-        viewPagerAdapter.addFragment(fragment2, "Previous");
+        viewPagerAdapter.addFragment(fragment2, "Stats");
         viewPager.setAdapter(viewPagerAdapter);
 
     }

@@ -39,11 +39,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_height="90dp"
+                    android:layout_width="match_parent" >
+                    <TextView
+                        android:id="@+id/tv4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:lineSpacingMultiplier="1.2"
+                        android:text=""
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
+                </com.google.android.material.card.MaterialCardView>
+
+
                 <TextView
                     android:id="@+id/tv3_frag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
+                    android:lineSpacingMultiplier="1.2"
                     android:text="No data found. Pull down to refresh data."
                     android:textSize="20sp" />
             </LinearLayout>
