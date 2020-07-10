@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FaqActivity"
+    android:orientation="vertical">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#2E3B55"
+        app:titleTextColor="#fff"
+        app:title="InstaSteps"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/about_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Frequently Asked Questions"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Q1. Can I save my data elsewhere? \nAnswer:
+Yes. Tap and hold the data in Stats tab to have it copied in the clipboard."
+            android:padding="15dp"
+            android:layout_marginBottom="10dp"
+            android:lineSpacingMultiplier="1.2"
+            android:textSize="15sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Q2. Where is your data stored? \nAnswer:
+It's stored only in your device's internal storage. Your data is safe with you."
+            android:padding="15dp"
+            android:layout_marginBottom="10dp"
+            android:lineSpacingMultiplier="1.2"
+            android:textSize="15sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Q3. How accurate is this step counter? \nAnswer:
+It is as accurate as it gets using the devices pedometer sensor. Most step counter apps are built around this. "
+            android:padding="15dp"
+            android:layout_marginBottom="10dp"
+            android:lineSpacingMultiplier="1.2"
+            android:textSize="15sp"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
