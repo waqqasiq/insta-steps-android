@@ -61,6 +61,15 @@ It is as accurate as it gets using the devices pedometer sensor. Most step count
             android:layout_marginBottom="10dp"
             android:lineSpacingMultiplier="1.2"
             android:textSize="15sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\u00a9 Copyright 2020 | Waqqas Iqbal"
+            android:textAlignment="center"
+            android:layout_marginTop="250dp"
+            android:textColor="#A9A9A9"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal" />
 
 
     </LinearLayout>
