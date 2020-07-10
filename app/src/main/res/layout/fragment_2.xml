@@ -26,7 +26,7 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/pullToRefresh"
-            android:layout_width="409dp"
+            android:layout_width="match_parent"
             android:layout_height="670dp"
             app:layout_constraintEnd_toEndOf="@id/clearButton"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
                         android:id="@+id/tv4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:padding="15dp"
                         android:lineSpacingMultiplier="1.2"
                         android:text=""
                         android:textStyle="bold"
@@ -63,7 +63,7 @@
                     android:id="@+id/tv3_frag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:lineSpacingMultiplier="1.2"
                     android:text="No data found. Pull down to refresh data."
                     android:textSize="18sp" />
