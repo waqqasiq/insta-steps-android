@@ -18,7 +18,7 @@ The app comprises of the following screens and features:
 
 
 * Stats Screen
-<img src="https://github.com/waqqasiq/insta-steps-android/blob/master/public/screens/stats_screen.jpg" width="270" height="480" />
+<img src="https://github.com/waqqasiq/insta-steps-android/blob/master/public/screens/stats_screen_v2.jpg" width="270" height="480" />
 
 
 * FAQ Screen
