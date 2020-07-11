@@ -63,7 +63,7 @@ public class Fragment2 extends Fragment {
 //    HashMap<String, ArrayList<String>> map;
     ArrayList<String>str;
     ArrayList<String> tempData;
-    private Double overallDailyAverageSteps;
+    private double overallDailyAverageSteps;
     private MaterialCardView materialcCard;
 
     public Fragment2() {
@@ -277,8 +277,16 @@ public class Fragment2 extends Fragment {
         double total_cal_burned_today = 0.05 * todaysTotal;
         //tv4.setText("Todays total steps: "+todaysTotal+"\nApprox Calories burned today: "+ String.format("%.2f", total_cal_burned_today) +" cal" +"\nAverage daily steps: "+ String.format("%.2f", overallDailyAverageSteps));
         tv4.setText(""+todaysTotal);
-        tv6.setText(String.format("%.2f", total_cal_burned_today));
-        tv8.setText(String.format("%.2f", overallDailyAverageSteps));
+        if((int)total_cal_burned_today==total_cal_burned_today) {
+            tv6.setText(""+(int)total_cal_burned_today);
+        }else{
+            tv6.setText(String.format("%.2f", total_cal_burned_today));
+        }
+        if((int)overallDailyAverageSteps==overallDailyAverageSteps) {
+            tv8.setText(""+(int)overallDailyAverageSteps);
+        }else{
+            tv8.setText(String.format("%.2f", overallDailyAverageSteps));
+        }
     }
 
 
