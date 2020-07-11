@@ -54,7 +54,7 @@ public class Fragment2 extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView tv3, tv4;
+    private TextView tv3, tv4, tv6, tv8, tv10;
     private Button clearButton;
     SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<String> dateArray;
@@ -115,6 +115,10 @@ public class Fragment2 extends Fragment {
 
         tv3 = view.findViewById(R.id.tv3_frag);
         tv4 = view.findViewById(R.id.tv4);
+        tv6 = view.findViewById(R.id.tv6);
+        tv8 = view.findViewById(R.id.tv8);
+        tv10 = view.findViewById(R.id.tv10); // activity log textview
+
         materialcCard = view.findViewById(R.id.materialCard);
         tv3.setText("");
         tv3.setText(readFromFile());
@@ -134,10 +138,12 @@ public class Fragment2 extends Fragment {
             tv3.setText("No data found. Pull down to refresh data.");
             tv4.setVisibility(View.GONE);
             materialcCard.setVisibility(View.GONE);
+            tv10.setVisibility(View.GONE);
         }
         else {
             tv4.setVisibility(View.VISIBLE);
             materialcCard.setVisibility(View.VISIBLE);
+            tv10.setVisibility(View.VISIBLE);
         }
 
 
@@ -159,10 +165,12 @@ public class Fragment2 extends Fragment {
                     tv3.setText("No data found. Pull down to refresh data.");
                     tv4.setVisibility(View.GONE);
                     materialcCard.setVisibility(View.GONE);
+                    tv10.setVisibility(View.GONE);
                 }
                 else {
                     tv4.setVisibility(View.VISIBLE);
                     materialcCard.setVisibility(View.VISIBLE);
+                    tv10.setVisibility(View.VISIBLE);
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -188,6 +196,7 @@ public class Fragment2 extends Fragment {
                                 tv3.setText("No data found. Pull down to refresh data.");
                                 tv4.setVisibility(View.GONE);
                                 materialcCard.setVisibility(View.GONE);
+                                tv10.setVisibility(View.GONE);
                                 clearTextData();
                                 onResume();
 
@@ -252,7 +261,9 @@ public class Fragment2 extends Fragment {
             if(todayDate.equals(dateArray.get(i))){
                 todaysTotal = temptotal;
             }
+            double cal_burned = 0.05 * temptotal;
             tempString += dateArray.get(i) +": Total Steps -> "+ temptotal+"\n";
+            tempString += dateArray.get(i) +": Approx cal -> "+ String.format("%.2f", cal_burned)+"\n";
             overallstring +=tempString+"\n";
         }
 
@@ -263,8 +274,11 @@ public class Fragment2 extends Fragment {
         overallDailyAverageSteps = overalltotal*1.0/dateSumSteps.size();
 
         tv3.setText(overallstring);
-        tv4.setText("Todays total steps: "+todaysTotal+"\nAverage daily steps: "+ String.format("%.2f", overallDailyAverageSteps));
-
+        double total_cal_burned_today = 0.05 * todaysTotal;
+        //tv4.setText("Todays total steps: "+todaysTotal+"\nApprox Calories burned today: "+ String.format("%.2f", total_cal_burned_today) +" cal" +"\nAverage daily steps: "+ String.format("%.2f", overallDailyAverageSteps));
+        tv4.setText(""+todaysTotal);
+        tv6.setText(String.format("%.2f", total_cal_burned_today));
+        tv8.setText(String.format("%.2f", overallDailyAverageSteps));
     }
 
 
